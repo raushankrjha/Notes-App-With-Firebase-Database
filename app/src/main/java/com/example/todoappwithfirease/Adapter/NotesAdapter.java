@@ -1,15 +1,21 @@
 package com.example.todoappwithfirease.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.todoappwithfirease.ItemClickListener;
+import com.example.todoappwithfirease.MainActivity;
 import com.example.todoappwithfirease.Model.Listdata;
-import com.example.todoappwithfirease.Model.Notes;
 import com.example.todoappwithfirease.R;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -17,10 +23,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
 {
 
     List<Listdata> noteslist;
-
-    public  NotesAdapter(List<Listdata> noteslist)
+    ValueEventListener context;
+    public  NotesAdapter(List<Listdata> noteslist, ValueEventListener context)
     {
         this.noteslist=noteslist;
+        this.context=context;
     }
 
 
@@ -36,8 +43,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         Listdata data=noteslist.get(position);
-        myHolder.title.setText(data.title);
-        myHolder.desc.setText(data.desc);
+        myHolder.title.setText(data.getTitle());
+        myHolder.desc.setText(data.getDesc());
+
+        myHolder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClick(int pos) {
+
+                Log.w("myApp", "ff");
+                    //Toast.makeText((Context) context,"dd",Toast.LENGTH_SHORT).show();
+                 }
+        });
     }
 
     @Override
@@ -45,12 +61,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
         return noteslist.size();
     }
 
-    class  MyHolder extends RecyclerView.ViewHolder {
+    class  MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title,desc;
+        ItemClickListener itemClickListener;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             title=itemView.findViewById(R.id.title);
             desc=itemView.findViewById(R.id.desc);
+            itemView.setOnClickListener(this);
+
+        }
+
+        public void setItemClickListener(ItemClickListener itemClickListener)
+        {
+            this.itemClickListener=itemClickListener;
+        }
+        @Override
+        public void onClick(View v) {
+            this.itemClickListener.onItemClick(this.getLayoutPosition());
         }
     }
 }

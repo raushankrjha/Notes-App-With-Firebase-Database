@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.todoappwithfirease.Model.Notes;
+import com.example.todoappwithfirease.Model.Listdata;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +37,9 @@ String titlesend,descsend;
 
     private void AddNotes(String titlesend, String descsend)
     {
-        Notes notes = new Notes(titlesend, descsend);
+        Listdata listdata = new Listdata(titlesend, descsend);
 
-        mDatabase.child("Notes").child(titlesend).setValue(notes).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child("Notes").push().setValue(listdata).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 startActivity(new Intent(getApplicationContext(),HomeScreen.class));
