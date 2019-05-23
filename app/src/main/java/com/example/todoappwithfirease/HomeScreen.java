@@ -53,8 +53,7 @@ public class HomeScreen extends AppCompatActivity {
 
                 }
 
-                NotesAdapter notesAdapter=new NotesAdapter(list,this);
-
+                NotesAdapter notesAdapter=new NotesAdapter(list);
                 recyclerView.setAdapter(notesAdapter);
 
             }

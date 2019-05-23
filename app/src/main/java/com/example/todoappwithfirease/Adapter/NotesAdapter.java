@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.todoappwithfirease.HomeScreen;
 import com.example.todoappwithfirease.ItemClickListener;
 import com.example.todoappwithfirease.MainActivity;
 import com.example.todoappwithfirease.Model.Listdata;
@@ -23,11 +24,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
 {
 
     List<Listdata> noteslist;
-    ValueEventListener context;
-    public  NotesAdapter(List<Listdata> noteslist, ValueEventListener context)
+    public  NotesAdapter(List<Listdata> noteslist)
     {
         this.noteslist=noteslist;
-        this.context=context;
     }
 
 
@@ -50,7 +49,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
             @Override
             public void onItemClick(int pos) {
 
-                Log.w("myApp", "ff");
+                Log.i("Button CLicked", "On item Click");
+
                     //Toast.makeText((Context) context,"dd",Toast.LENGTH_SHORT).show();
                  }
         });
