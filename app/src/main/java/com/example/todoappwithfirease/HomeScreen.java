@@ -38,6 +38,9 @@ public class HomeScreen extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(HomeScreen.this);
         recyclerView.setLayoutManager(layoutManager);
+
+        final NotesAdapter notesAdapter=new NotesAdapter(list,this);
+        recyclerView.setAdapter(notesAdapter);
         FloatingActionButton fab = findViewById(R.id.fab);
         firebaseDatabase=FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Notes");
@@ -52,9 +55,9 @@ public class HomeScreen extends AppCompatActivity {
                     list.add(listdata);
 
                 }
+                notesAdapter.notifyDataSetChanged();
 
-                NotesAdapter notesAdapter=new NotesAdapter(list);
-                recyclerView.setAdapter(notesAdapter);
+
 
             }
 

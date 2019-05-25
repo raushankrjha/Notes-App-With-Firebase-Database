@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.todoappwithfirease.Model.Listdata;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 EditText title,desc;
 String titlesend,descsend;
-    private DatabaseReference mDatabase;
+private DatabaseReference mDatabase;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +33,23 @@ String titlesend,descsend;
     public void AddNotes(View view) {
         titlesend=title.getText().toString();
         descsend=desc.getText().toString();
+        if(TextUtils.isEmpty(titlesend) || TextUtils.isEmpty(descsend)){
+            return;
+        }
         AddNotes(titlesend,descsend);
 
     }
 
     private void AddNotes(String titlesend, String descsend)
     {
-        Listdata listdata = new Listdata(titlesend, descsend);
 
-        mDatabase.child("Notes").push().setValue(listdata).addOnCompleteListener(new OnCompleteListener<Void>() {
+        String id=mDatabase.push().getKey();
+        Listdata listdata = new Listdata(id,titlesend, descsend);
+        mDatabase.child("Notes").child(id).setValue(listdata).
+                addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(MainActivity.this, "Notes Added", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(),HomeScreen.class));
             }
         });

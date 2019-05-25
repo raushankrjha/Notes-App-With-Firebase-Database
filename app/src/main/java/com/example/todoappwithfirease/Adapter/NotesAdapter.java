@@ -11,21 +11,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.todoappwithfirease.EditActivity;
 import com.example.todoappwithfirease.HomeScreen;
-import com.example.todoappwithfirease.ItemClickListener;
 import com.example.todoappwithfirease.MainActivity;
 import com.example.todoappwithfirease.Model.Listdata;
 import com.example.todoappwithfirease.R;
-import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
 {
 
     List<Listdata> noteslist;
-    public  NotesAdapter(List<Listdata> noteslist)
+    private Context context;
+    public  NotesAdapter(List<Listdata> noteslist,Context context)
     {
+        this.context=context;
         this.noteslist=noteslist;
     }
 
@@ -44,16 +46,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
         Listdata data=noteslist.get(position);
         myHolder.title.setText(data.getTitle());
         myHolder.desc.setText(data.getDesc());
-
-        myHolder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onItemClick(int pos) {
-
-                Log.i("Button CLicked", "On item Click");
-
-                    //Toast.makeText((Context) context,"dd",Toast.LENGTH_SHORT).show();
-                 }
-        });
     }
 
     @Override
@@ -61,24 +53,27 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyHolder>
         return noteslist.size();
     }
 
-    class  MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class  MyHolder extends RecyclerView.ViewHolder  {
         TextView title,desc;
-        ItemClickListener itemClickListener;
+
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             title=itemView.findViewById(R.id.title);
             desc=itemView.findViewById(R.id.desc);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Listdata listdata=noteslist.get(getAdapterPosition());
+                    Intent i=new Intent(context, EditActivity.class);
+                    i.putExtra("id",listdata.id);
+                    i.putExtra("title",listdata.title);
+                    i.putExtra("desc",listdata.desc);
+                    context.startActivity(i);
+                    }
+            });
 
         }
 
-        public void setItemClickListener(ItemClickListener itemClickListener)
-        {
-            this.itemClickListener=itemClickListener;
-        }
-        @Override
-        public void onClick(View v) {
-            this.itemClickListener.onItemClick(this.getLayoutPosition());
-        }
+
     }
 }
